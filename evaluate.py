@@ -5,22 +5,22 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
 
+def evaluate_model():
+    model = joblib.load('model.pkl')
 
-model = joblib.load('model.pkl')
+    d = load_breast_cancer(as_frame=True)
 
-d = load_breast_cancer(as_frame=True)
-
-df = d.frame
+    df = d.frame
 
 
-X = df.drop(columns=TARGET)
-y = df[TARGET]
+    X = df.drop(columns=TARGET)
+    y = df[TARGET]
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
-    test_size=TEST_SIZE,
-    random_state=RANDOM_STATE
-)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE
+    )
 
-y_proba = model.predict(X_test)
-print(classification_report(y_test, y_proba))
+    y_proba = model.predict(X_test)
+    print(classification_report(y_test, y_proba))
