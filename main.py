@@ -1,6 +1,6 @@
-import train
-import evaluate
+from train import train_model
+from evaluate import evaluate_model
 
 
-train.train_model()
-evaluate.evaluate_model()
+train_model()
+evaluate_model()

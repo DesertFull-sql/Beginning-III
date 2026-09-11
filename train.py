@@ -7,10 +7,9 @@ import joblib
 
 
 def train_model():
+
     d = load_breast_cancer(as_frame=True)
-
     df = d.frame
-
 
     X = df.drop(columns=TARGET)
     y = df[TARGET]
