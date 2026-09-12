@@ -1,31 +1,40 @@
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from config import NUMERIC_FEATURES
 
 
-def build_numeric_transformer(
-        columns,
+def build_numeric_pipeline(
         impute_strategy: str = 'median'
-) -> ColumnTransformer:
-    numeric_imputer = ColumnTransformer(
-        transformers=[
-            ('fill_nan', SimpleImputer(strategy=impute_strategy), columns)
-        ],
-        remainder='passthrough'
+) -> Pipeline:
+    return Pipeline(
+        [
+            ('fill_nan', SimpleImputer(strategy=impute_strategy)),
+            ('scaler', StandardScaler())
+        ]
     )
-    return numeric_imputer 
 
 
 def build_categorical_pipeline(
         impute_strategy: str = 'most_frequent'
 ) -> Pipeline:
-    categorical_imputer = Pipeline(
+    return Pipeline(
         [
             ('imputer', SimpleImputer(strategy=impute_strategy)),
             ('encoder', OneHotEncoder(handle_unknown='ignore'))    
         ]
     )
-    return categorical_imputer
+
+def build_preprocessor(
+        num_columns,
+        cat_columns
+) -> ColumnTransformer:
+    return ColumnTransformer(
+        [
+            ('num', build_numeric_pipeline(), num_columns),
+            ('cat', build_categorical_pipeline(), cat_columns)
+        ],
+        remainder='passthrough'
+    )
     

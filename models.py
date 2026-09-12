@@ -1,12 +1,21 @@
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from features import preprocessor
+from features import build_preprocessor
 
-logreg = Pipeline([
-    ('preprocessor', preprocessor),
-    ('scaler', StandardScaler()),
-    ('model', LogisticRegression(
-        max_iter=1000
-    ))
-])
+
+def build_log_reg(
+        impute_max_iter: int = 1000
+) -> Pipeline:
+    return Pipeline(
+        [
+            ('preprocessor', build_preprocessor()),
+            ('model',
+                LogisticRegression(
+                    max_iter=impute_max_iter,
+                    class_weight='balanced'
+                )
+             )
+        ]
+    )
+
